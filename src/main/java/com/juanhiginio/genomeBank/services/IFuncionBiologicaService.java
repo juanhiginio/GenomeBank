@@ -1,4 +1,4 @@
 package com.juanhiginio.genomeBank.services;
 
-public interface IGenFuncion {
+public interface IFuncionBiologicaService {
 }

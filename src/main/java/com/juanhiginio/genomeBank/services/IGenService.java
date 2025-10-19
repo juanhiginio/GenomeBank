@@ -1,4 +1,4 @@
 package com.juanhiginio.genomeBank.services;
 
-public interface ICromosoma {
+public interface IGenService {
 }
