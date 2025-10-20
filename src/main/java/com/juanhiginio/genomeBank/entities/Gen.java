@@ -21,7 +21,7 @@ public class Gen {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Long id;
 
     @Column(name = "simbolo", length = 50, nullable = false)
     private String simbolo;
