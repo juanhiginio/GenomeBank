@@ -21,7 +21,7 @@ public class Usuario {
     private String nombre;
 
     @Column(name = "correoelectronico", nullable = false, unique = true, length = 150)
-    private String correoelectronico;
+    private String correoElectronico;
 
     @Column(name = "contrasena", nullable = false, length = 255)
     private String contrasena;
