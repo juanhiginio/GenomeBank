@@ -11,6 +11,6 @@ public class CrearGenInDTO {
 
     private String orientacion;
 
-    private int cromosoma_id;
+    private Long cromosoma_id;
 
 }

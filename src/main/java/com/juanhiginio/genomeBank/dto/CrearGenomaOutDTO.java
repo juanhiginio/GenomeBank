@@ -4,6 +4,6 @@ import lombok.Data;
 @Data
 public class CrearGenomaOutDTO {
 
-    private int id;
-    private int especie_id;
+    private Long id;
+    private Long especie_id;
 }

@@ -3,5 +3,5 @@ package com.juanhiginio.genomeBank.dto;
 import lombok.Data;
 public class CrearGenomaInDTO {
 
-    private int especie_id;
+    private Long especie_id;
 }

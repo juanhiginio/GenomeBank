@@ -18,7 +18,7 @@ public class CrearCromosomaInDTO {
     private String secuenciaADN;
 
     @NotNull
-    private int genoma_id;
+    private Long genoma_id;
 
 
 

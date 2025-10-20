@@ -4,7 +4,7 @@ import lombok.Data;
 @Data
 public class CrearUsuarioOutDTO {
 
-    private int id;
+    private Long id;
     private String nombre;
     private String correoElectronico;
     private String rol; // 'USUARIO' o 'ADMINISTRADOR'

@@ -12,5 +12,5 @@ public class CrearGenOutDTO {
     private String orientacion;
 
     private String secuenciaADN;
-    private int cromosoma_id;
+    private Long cromosoma_id;
 }
