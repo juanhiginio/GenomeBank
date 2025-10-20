@@ -9,7 +9,7 @@ public class CrearGenInDTO {
     private int posicionFinal;
     private String secuenciaADN;
 
-    //private String orientacion; TENER EN CUENTA QUE ESTE DATO SE TRABAJA CON ENUM, REVISAR COMO SE INTEGRA EN DTO
+    private String orientacion;
 
     private int cromosoma_id;
 
