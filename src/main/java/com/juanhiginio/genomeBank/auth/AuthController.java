@@ -56,13 +56,13 @@ public class AuthController {
      */
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody Map<String, String> req) {
-        String username = req.get("username");
-        String password = req.get("password");
+        String correoelectronico = req.get("correoelectronico");
+        String contrasena = req.get("contrasena");
 
         // Si las credenciales son incorrectas, lanza AuthenticationException → 401 por defecto
-        authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        authManager.authenticate(new UsernamePasswordAuthenticationToken(correoelectronico, contrasena));
 
-        var user = usuarioRepo.findByUsername(username).orElseThrow();
+        var user = usuarioRepo.findByCorreoelectronico(correoelectronico).orElseThrow();
         var roles = user.getRoles().stream().map(Rol::getNombre).toList();
         String token = jwt.generate(user.getUsername(), roles);
 
@@ -82,18 +82,16 @@ public class AuthController {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public Map<String, Object> register(@RequestBody RegisterRequest req) {
-        if (req.getUsername() == null || req.getPassword() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing username or password");
-        }
-        if (usuarioRepo.findByUsername(req.getUsername()).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username already exists");
+
+        if (usuarioRepo.findByCorreoelectronico(req.getCorreoelectronico()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "El correo electrónico ya existe");
         }
 
         List<String> roleNames = (req.getRoles() == null || req.getRoles().isEmpty())
                 ? List.of("USER")
                 : req.getRoles();
 
-        // Manejo correcto de roles para evitar ConcurrentModificationException
+        // Buscar o crear roles
         Set<Rol> rolEntities = new HashSet<>();
         for (String roleName : roleNames) {
             Rol rol = rolRepo.findByNombre(roleName).orElseGet(() -> {
@@ -104,9 +102,12 @@ public class AuthController {
             rolEntities.add(rol);
         }
 
+        // Crear usuario con todos los campos obligatorios
         Usuario user = new Usuario();
-        user.setUsername(req.getUsername());
-        user.setPassword(passwordEncoder.encode(req.getPassword()));
+        user.setNombre(req.getNombre());
+        user.setCorreoelectronico(req.getCorreoelectronico());
+        user.setContrasena(passwordEncoder.encode(req.getPassword()));
+        user.setActivo(req.getActivo() != null ? req.getActivo() : true);
         user.setRoles(rolEntities);
 
         usuarioRepo.save(user);

@@ -39,7 +39,7 @@ public class AuthConfig {
      */
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> usuarioRepository.findByUsername(username)
+        return username -> usuarioRepository.findByCorreoelectronico(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
     }
 }
