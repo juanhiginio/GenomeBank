@@ -1,0 +1,182 @@
+--Crear la base de datos
+
+CREATE DATABASE IF NOT EXISTS genomebank_db
+
+CHARACTER SET utf8mb4
+
+COLLATE utf8mb4_unicode_ci;
+
+
+--Trabajar sobre la Base de Datos
+
+USE genomebank_db;
+
+
+
+-- TABLA: Especie
+
+CREATE TABLE Especie (
+
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    nombreCientifico VARCHAR(150) NOT NULL UNIQUE,
+
+    nombreComun VARCHAR(150)
+
+);
+
+
+
+-- TABLA: Genoma
+
+CREATE TABLE Genoma (
+
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    especie_id BIGINT NOT NULL,
+
+    FOREIGN KEY (especie_id) REFERENCES Especie(id)
+
+        ON DELETE CASCADE ON UPDATE CASCADE
+
+);
+
+
+
+-- TABLA: Cromosoma
+
+CREATE TABLE Cromosoma (
+
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    nombre VARCHAR(255),
+
+    longitudParesDeBases INT,
+
+    secuenciaADN TEXT NOT NULL,
+
+    genoma_id BIGINT NOT NULL,
+
+    FOREIGN KEY (genoma_id) REFERENCES Genoma(id)
+
+        ON DELETE CASCADE ON UPDATE CASCADE
+
+);
+
+
+
+-- TABLA: Gen
+
+CREATE TABLE Gen (
+
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    símbolo VARCHAR(50) NOT NULL,
+
+    posicionInicio INT NOT NULL,
+
+    posicionFinal INT NOT NULL,
+
+    orientación ENUM('F', 'R') NOT NULL, -- Basado en OrientacionGen
+
+    secuenciaADN TEXT NOT NULL,
+
+    cromosoma_id BIGINT NOT NULL,
+
+    FOREIGN KEY (cromosoma_id) REFERENCES Cromosoma(id)
+
+        ON DELETE CASCADE ON UPDATE CASCADE
+
+);
+
+
+
+-- TABLA: FuncionBiologica
+
+CREATE TABLE FuncionBiologica (
+
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    codigoUnico VARCHAR(100) NOT NULL UNIQUE,
+
+    nombre VARCHAR(150) NOT NULL,
+
+    categoría ENUM('M', 'C', 'S') NOT NULL -- Basado en CategoriaFuncion
+
+);
+
+
+
+-- TABLA: GenFuncion
+
+CREATE TABLE GenFuncion (
+
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    gen_id BIGINT NOT NULL,
+
+    función_id BIGINT NOT NULL,
+
+    FOREIGN KEY (gen_id) REFERENCES Gen(id)
+
+        ON DELETE CASCADE ON UPDATE CASCADE,
+
+    FOREIGN KEY (función_id) REFERENCES FuncionBiologica(id)
+
+        ON DELETE CASCADE ON UPDATE CASCADE,
+
+    UNIQUE (gen_id, función_id)
+
+);
+
+
+
+-- TABLA: Rol
+
+CREATE TABLE rol (
+
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    nombre VARCHAR(50) NOT NULL UNIQUE
+
+);
+
+
+
+-- TABLA: Usuario
+
+CREATE TABLE Usuario (
+
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+
+    nombre VARCHAR(100) NOT NULL,
+
+    correoelectronico VARCHAR(150) NOT NULL UNIQUE,
+
+    contraseña VARCHAR(255) NOT NULL,
+
+    activo BOOLEAN NOT NULL DEFAULT TRUE
+
+);
+
+
+
+-- TABLA: usuario_rol (relación N:M)
+
+CREATE TABLE usuario_rol (
+
+    usuario_id BIGINT NOT NULL,
+
+    rol_id BIGINT NOT NULL,
+
+    PRIMARY KEY (usuario_id, rol_id),
+
+    FOREIGN KEY (usuario_id) REFERENCES Usuario(id)
+
+        ON DELETE CASCADE ON UPDATE CASCADE,
+
+    FOREIGN KEY (rol_id) REFERENCES rol(id)
+
+        ON DELETE CASCADE ON UPDATE CASCADE
+
+);
